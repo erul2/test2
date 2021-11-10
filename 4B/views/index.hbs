@@ -2,20 +2,25 @@
 {{>navbar}}
 <div class="container pt-5">
     <h3>Collections</h3>
-    <div class="d-flex">
+    <div class="row row-cols-3 g-4 mt-3">
         {{#each collections}}
-        <a href="/collection/{{this.id}}">
-            <div class="ccard rounded bg-dark p-2 m-3">
-                <img src="" alt="" class="top">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <h6 class="text-light h4">{{this.name}}</h6>
-                        <span class="text-muted">2/9 done</span>
+        <div class="col card-group">
+            <a href="/collection/{{this.id}}" class="text-decoration-none">
+                <div class="card text-center" style="width: 180px">
+                    <div class="card-body">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                            class="bi bi-file-earmark-minus" viewBox="0 0 16 16">
+                            <path d="M5.5 9a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z" />
+                            <path
+                                d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
+                        </svg>
+                        <h4 class="fw-bold mt-2">
+                            {{this.name}}
+                        </h4>
                     </div>
-                    <img src="..." alt="..." style=" width: 30px; height: 30px; background-color: grey;">
                 </div>
-            </div>
-        </a>
+            </a>
+        </div>
         {{/each}}
     </div>
 </div>

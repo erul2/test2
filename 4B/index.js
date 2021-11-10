@@ -60,34 +60,54 @@ app.get('/', (req, res) => {
 
 // login page
 app.get('/login', (req, res) => {
-    res.render('login')
+    res.render('login', {
+        auth: true
+    })
 })
 
 // register page
 app.get('/register', (req, res) => {
-    res.render('register')
+    res.render('register', {
+        auth: true
+    })
 })
 
 // collections page
 app.get('/collection/:id', (req, res) => {
     const query = `SELECT * FROM task_tb WHERE collections_id = ${req.params.id}`
-    const own = `SELECT user_id from collections_tb where id = ${req.params.id}`
+    const own = `SELECT user_id,name from collections_tb where id = ${req.params.id}`
     db.getConnection((e, conn) => {
-        let owner = ''
+        let owner = false
+        let coll = ''
         conn.query(own, (e, results) => {
-            owner = results[0].user_id
+            if (req.session.isLogin) {
+                (results[0].user_id == req.session.user.id) ? owner = true: null
+            }
+            coll = results[0].name
         })
         conn.query(query, (e, results) => {
             if (e) throw e
-            let uid = '';
-            (req.session.isLogin) ? uid = req.session.user.id: null
+            let task = []
+            let taskd = []
+            for (t of results) {
+                if (t.is_done) {
+                    taskd.push(t)
+                } else {
+                    task.push(t)
+                }
+            }
+
             res.render('collection', {
                 title: `Collection - ${results[0].name}`,
-                results,
+                task,
+                taskd,
+                coll,
                 owner,
-                uid
+                isLogin: req.session.isLogin
             })
+            console.log(task)
         })
+        conn.release()
     })
 })
 
@@ -151,6 +171,12 @@ app.post('/login', (req, res) => {
         })
         conn.release()
     })
+})
+
+// logout process 
+app.get('/logout', (req, res) => {
+    req.session.destroy()
+    res.redirect('/')
 })
 
 // --- COLECTIONS ---
@@ -299,6 +325,10 @@ console.debug('Server listening on port ' + PORT)
 
 hbs.handlebars.registerHelper('isAuth',
     function (value) {
-        (value) ? false: true
+        if (value == true) {
+            return false;
+        } else {
+            return true;
+        }
     }
 )
