@@ -89,19 +89,21 @@ app.get('/collection/:id', (req, res) => {
             if (e) throw e
             let task = []
             let taskd = []
-            for (t of results) {
-                if (t.is_done) {
-                    taskd.push(t)
-                } else {
-                    task.push(t)
+            if (results != 0) {
+                for (t of results) {
+                    if (t.is_done) {
+                        taskd.push(t)
+                    } else {
+                        task.push(t)
+                    }
                 }
             }
-
             res.render('collection', {
-                title: `Collection - ${results[0].name}`,
+                title: `Collection`,
                 task,
                 taskd,
                 coll,
+                collId: req.params.id,
                 owner,
                 isLogin: req.session.isLogin
             })
@@ -183,16 +185,16 @@ app.get('/logout', (req, res) => {
 // create collections
 app.post('/collection', (req, res) => {
     const {
-        name,
-        uid
+        name
     } = req.body
-    const query = `INSERT INTO collection_tb (name, user_id) VALUES ("${name}","${uid}")`
+    const uid = req.session.user.id
+    const query = `INSERT INTO collections_tb (name, user_id) VALUES ("${name}","${uid}")`
 
     db.getConnection((e, conn) => {
         conn.query(query, (e, results) => {
             if (e) throw e
             req.session.message = {
-                type: 'succes',
+                type: 'success',
                 message: 'Collection Added'
             }
             res.redirect(`/collection/${results.insertId}`)
@@ -245,13 +247,13 @@ app.post('/task', (req, res) => {
         name,
         coll_id
     } = req.body
-    const query = `INSERT INTO task_tb (name, collection_id) VALUES ("${name}","${coll_id}")`
+    const query = `INSERT INTO task_tb (name, collections_id) VALUES ("${name}","${coll_id}")`
 
     db.getConnection((e, conn) => {
         conn.query(query, (e, results) => {
             if (e) throw e
             req.session.message = {
-                type: 'succes',
+                type: 'success',
                 message: 'Task Added'
             }
             res.redirect(`/collection/${coll_id}`)

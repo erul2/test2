@@ -12,13 +12,14 @@
             <h5 class="fw-bold mx-3">{{coll}}</h5>
         </div>
         {{#if owner}}
-        <a href="/delete/{{id}}" class="btn btn-danger ms-auto">Delete</a>
+        <a href="/delete-collection/{{collId}}" class="btn btn-danger ms-auto">Delete</a>
         {{/if}}
     </div>
 </div>
 <div class="container">
     {{#if owner}}
-    <div class="d-flex rounded border border-dark p-2 align-items-center fs-4">
+    <div class="d-flex rounded border border-dark p-2 align-items-center fs-4" data-bs-toggle="modal"
+        data-bs-target="#addtask">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
             class="bi bi-plus-circle me-2" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -52,5 +53,29 @@
         </div>
     </div>
     {{/each}}
+</div>
+
+<div class="modal fade" id="addtask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/task" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Task Name</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                        <input type="hidden" value="{{collId}}" name="coll_id">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {{>footer}}
