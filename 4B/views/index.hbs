@@ -1,0 +1,22 @@
+{{>header}}
+{{>navbar}}
+<div class="container pt-5">
+    <h3>Collections</h3>
+    <div class="d-flex">
+        {{#each collections}}
+        <a href="/collection/{{this.id}}">
+            <div class="ccard rounded bg-dark p-2 m-3">
+                <img src="" alt="" class="top">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-light h4">{{this.name}}</h6>
+                        <span class="text-muted">2/9 done</span>
+                    </div>
+                    <img src="..." alt="..." style=" width: 30px; height: 30px; background-color: grey;">
+                </div>
+            </div>
+        </a>
+        {{/each}}
+    </div>
+</div>
+{{>footer}}
